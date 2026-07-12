@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Verificação de Autenticidade Acadêmica - UNIP</title>
+    <style>
+        :root {
+            --primary-color: #002B5B;
+            --secondary-color: #f8f9fa;
+            --border-color: #ced4da;
+            --success-color: #198754;
+            --error-color: #dc3545;
+            --text-dark: #212529;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .gov-bar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            font-weight: bold;
+            border-bottom: 3px solid #ffc107;
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .header-system {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .institution-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .system-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #6c757d;
+            margin-top: 5px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+        }
+
+        .instruction-text {
+            font-size: 13px;
+            color: #495057;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin-bottom: 25px;
+            border-radius: 0 4px 4px 0;
+            line-height: 1.4;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        label {
+            display:block;
+            margin-bottom:8px;
+            font-weight:bold;
+            font-size:12px;
+            color:#495057;
+        }
+
+        input[type="text"]{
+            width:100%;
+            padding:14px;
+            border:1px solid var(--border-color);
+            border-radius:4px;
+            box-sizing:border-box;
+            font-size:16px;
+            text-align:center;
+            font-weight:bold;
+        }
+
+        button{
+            width:100%;
+            background:var(--primary-color);
+            color:#fff;
+            padding:14px;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            font-weight:bold;
+        }
+
+        .result-box{display:none;margin-top:30px}
+        .success{border:1px solid #a3cfbb}
+        .success-header{background:#d1e7dd;padding:12px;font-weight:bold;display:flex;justify-content:space-between}
+        .success-body{padding:20px}
+        .error{background:#f8d7da;border:1px solid #f5c2c7;padding:15px;border-radius:4px}
+        .info-table{width:100%;border-collapse:collapse}
+        .info-table td{padding:10px 4px;border-bottom:1px dashed #ddd}
+        .info-label{color:#666}
+        .doc-tag{display:block;background:#e2e3e5;padding:6px;text-align:center;font-weight:bold;margin-bottom:15px}
+        .footer-system{text-align:center;padding:20px;font-size:11px}
+    </style>
+</head>
+<body>
+<div class="gov-bar">SISTEMA DE SECRETARIA ELETRÔNICA DE AUTENTICIDADE ACADÊMICA</div>
+<div class="main-wrapper">
+<div class="container">
+<div class="header-system">
+<div class="institution-title">UNIP</div>
+<div class="system-title">Validação e Conferência de Documentos</div>
+</div>
+<div class="instruction-text">
+Insira a chave de validação impressa na margem de verificação para certificar o conteúdo jurídico e acadêmico emitido pela instituição.
+</div>
+<div class="form-group">
+<label for="codigoVerificacao">CHAVE DE ACESSO VERIFICADORA:</label>
+<input type="text" id="codigoVerificacao" placeholder="Ex: 2026766616">
+</div>
+<button onclick="verificarDocumento()">Consultar Registro</button>
+
+<div id="resultadoSucesso" class="result-box success">
+<div class="success-header"><span>✓ REGISTRO LOCALIZADO COM SUCESSO</span><span>AUTÊNTICO</span></div>
+<div class="success-body">
+<div id="doc-tipo" class="doc-tag"></div>
+<table class="info-table">
+<tr><td class="info-label">Nome do Aluno</td><td id="doc-nome"></td></tr>
+<tr><td class="info-label">RG</td><td id="doc-rg"></td></tr>
+<tr><td class="info-label">Matrícula</td><td id="doc-matricula"></td></tr>
+<tr><td class="info-label">Curso</td><td id="doc-curso"></td></tr>
+<tr><td class="info-label">Carga Horária</td><td id="doc-horas"></td></tr>
+<tr><td class="info-label">Média</td><td id="doc-media"></td></tr>
+<tr><td class="info-label">MEC</td><td id="doc-mec"></td></tr>
+<tr><td class="info-label">Detalhes</td><td id="doc-detalhes"></td></tr>
+</table>
+</div>
+</div>
+
+<div id="resultadoErro" class="result-box error">
+Aviso: A chave informada não corresponde a nenhum registro oficial.
+</div>
+</div>
+</div>
+
+<div class="footer-system">
+© 2026 Universidade Paulista - Secretaria de Registro Acadêmico.
+</div>
+
+<script>
+const bancoDeDadosDocumentos={
+"2026766616":{tipo:"Histórico Escolar Oficial de Graduação",nome:"ALAN FABIO MELO DA PAZ GOMES",rg:"36771919 AL",matricula:"T25648-0",curso:"Bacharelado em Engenharia Civil",horas:"5.040 horas (100% cumprida)",media:"7,4",mec:"Portaria Nº 428 (D.O.U. 21/12/2019)",detalhes:"Emitido em 25/06/2026 - Colação de Grau em 13/03/2020"},
+"2026766615":{tipo:"Certidão de Aptidão para Pós-Graduação",nome:"ALAN FABIO MELO DA PAZ GOMES",rg:"36771919 AL",matricula:"T25648-0",curso:"Bacharelado em Engenharia Civil",horas:"5.040 horas",media:"7,4",mec:"Portaria Nº 428 (D.O.U. 21/12/2019)",detalhes:"Habilita o titular ao ingresso em programas de Pós-Graduação"},
+"2026766618":{tipo:"Declaração de Critérios de Avaliação e Promoção",nome:"ALAN FABIO MELO DA PAZ GOMES",rg:"36771919 AL",matricula:"T25648-0",curso:"Bacharelado em Engenharia Civil",horas:"Regulamento Acadêmico Geral",media:"Média ≥ 5,0",mec:"Portaria Nº 428 (D.O.U. 21/12/2019)",detalhes:"Critérios de notas e frequência mínima de 75%"}
+};
+function verificarDocumento(){
+const c=document.getElementById("codigoVerificacao").value.trim();
+const s=document.getElementById("resultadoSucesso");
+const e=document.getElementById("resultadoErro");
+s.style.display="none";e.style.display="none";
+if(bancoDeDadosDocumentos[c]){
+const d=bancoDeDadosDocumentos[c];
+["tipo","nome","rg","matricula","curso","horas","media","mec","detalhes"].forEach(k=>{
+document.getElementById("doc-"+k).innerText=d[k];
+});
+s.style.display="block";
+}else e.style.display="block";
+}
+</script>
+</body>
+</html>
